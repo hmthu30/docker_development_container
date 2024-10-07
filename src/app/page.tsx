@@ -1,27 +1,29 @@
-'use client'
+"use client";
 
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import axios from "axios";
+import { useEffect, useState } from "react";
 
 const DataFetcher = () => {
-  const [data, setData] = useState('');
+  const [data, setData] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/hello');
+        // Call the dynamic slug-based proxy route at /api/events
+        const response = await axios.get("/api/events/testing");
+        console.log("🚀 ~ fetchData ~ response:", response.data);
         setData(response.data);
-      } catch (error : any) {
-        setError(error.message);
+      } catch (error: any) {
+        setError(error.message || "Something went wrong.");
       } finally {
         setLoading(false);
       }
     };
 
     fetchData();
-  });
+  }, []);
 
   if (loading) {
     return <div>Loading...</div>;
@@ -33,7 +35,7 @@ const DataFetcher = () => {
 
   return (
     <div>
-      <h1>DATA112224443: {data}</h1>
+      <h1>This is a testing page... {data ? data.name : "No data found"}</h1>
     </div>
   );
 };
